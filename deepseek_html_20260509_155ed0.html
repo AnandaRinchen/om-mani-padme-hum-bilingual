@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Oṃ Maṇi Padme Hūṃ — Bilingual Edition</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #fdf8f2;
+      color: #3e2c1c;
+      font-family: 'Segoe UI', 'Noto Serif', 'Times New Roman', serif;
+      line-height: 1.7;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    /* ---------- Typography ---------- */
+    h1, h2, h3 {
+      font-weight: 400;
+      letter-spacing: 0.02em;
+    }
+
+    h2 {
+      font-size: 2.2rem;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #d4af37;
+      display: inline-block;
+      padding-bottom: 0.3rem;
+    }
+
+    .sanskrit {
+      font-family: 'Noto Serif Devanagari', 'Sanskrit Text', serif;
+      font-weight: 500;
+    }
+
+    /* ---------- Hero ---------- */
+    .hero {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #7a2e2e 0%, #b3542c 40%, #e1a040 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      color: #fff5e6;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" opacity="0.1"><path d="M100 20 C70 20 40 50 20 80 C40 110 70 140 100 180 C130 140 160 110 180 80 C160 50 130 20 100 20Z" fill="%23fff"/></svg>');
+      background-size: 300px;
+      animation: floatBg 30s linear infinite;
+    }
+
+    @keyframes floatBg {
+      0% { transform: translateY(0) rotate(0deg); }
+      100% { transform: translateY(-50px) rotate(5deg); }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      letter-spacing: 0.3rem;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+    }
+
+    .hero .mantra {
+      font-size: 4rem;
+      font-weight: 300;
+      margin: 1.5rem 0;
+      animation: gentlePulse 4s ease-in-out infinite;
+      display: inline-block;
+    }
+
+    @keyframes gentlePulse {
+      0%, 100% { transform: scale(1); opacity: 0.95; }
+      50% { transform: scale(1.03); opacity: 1; }
+    }
+
+    .hero .author {
+      font-style: italic;
+      font-size: 1.3rem;
+      margin-top: 1rem;
+    }
+
+    .lotus-divider {
+      font-size: 2.5rem;
+      margin: 1.5rem 0;
+      opacity: 0.8;
+    }
+
+    .hero blockquote {
+      border-left: 3px solid #ffd966;
+      padding: 1rem 2rem;
+      margin: 2rem auto;
+      font-style: italic;
+      background: rgba(255,255,240,0.1);
+      border-radius: 0 12px 12px 0;
+      max-width: 600px;
+      text-align: left;
+    }
+
+    /* ---------- Navigation ---------- */
+    nav.toc {
+      background: #f9edd4;
+      padding: 2rem;
+      border-bottom: 2px solid #d4af37;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(10px);
+      background: rgba(249, 237, 212, 0.9);
+    }
+
+    .toc-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .toc-col {
+      flex: 1 1 250px;
+    }
+
+    .toc-col h3 {
+      font-size: 1.3rem;
+      color: #7a2e2e;
+      margin-bottom: 0.8rem;
+    }
+
+    .toc-col a {
+      display: block;
+      padding: 0.3rem 0;
+      color: #3e2c1c;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .toc-col a:hover {
+      color: #b3542c;
+      text-decoration: underline;
+    }
+
+    /* ---------- Sections ---------- */
+    .section {
+      padding: 4rem 2rem;
+      max-width: 900px;
+      margin: 0 auto;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .english, .chinese {
+      padding: 2rem 0;
+    }
+
+    .chinese {
+      border-top: 1px dashed #d4af37;
+      margin-top: 3rem;
+    }
+
+    /* ---------- Cards / Lists ---------- */
+    .bullet-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .bullet-list li {
+      padding: 0.5rem 0 0.5rem 1.5rem;
+      position: relative;
+    }
+
+    .bullet-list li::before {
+      content: "❖";
+      color: #d4af37;
+      position: absolute;
+      left: 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 2rem 0;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+      background: #fffcf5;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    th {
+      background: #7a2e2e;
+      color: #fff5e6;
+      font-weight: 500;
+      padding: 1rem;
+      text-align: left;
+    }
+
+    td, th {
+      padding: 0.9rem 1rem;
+      border-bottom: 1px solid #e7d7b8;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .table-note {
+      font-style: italic;
+      color: #6b4c2b;
+      margin-top: -1rem;
+      margin-bottom: 2rem;
+    }
+
+    /* ---------- Thangka placeholder ---------- */
+    .art-placeholder {
+      text-align: center;
+      margin: 2rem 0;
+    }
+
+    .art-placeholder img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+      border: 3px solid #d4af37;
+      transition: transform 0.5s ease;
+    }
+
+    .art-placeholder img:hover {
+      transform: scale(1.02);
+    }
+
+    .caption {
+      font-size: 0.9rem;
+      color: #8b7355;
+      margin-top: 0.6rem;
+    }
+
+    /* ---------- Footer ---------- */
+    footer {
+      text-align: center;
+      padding: 3rem 2rem;
+      background: #3e2c1c;
+      color: #fdf8f2;
+    }
+
+    .footer-mantra {
+      font-size: 2rem;
+      margin: 1.5rem 0;
+    }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 600px) {
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+      .hero .mantra {
+        font-size: 3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Hero / Landing -->
+  <header class="hero">
+    <div class="hero-content">
+      <div class="lotus-divider">❀</div>
+      <h1>THE SIX-SYLLABLE MANTRA</h1>
+      <div class="mantra">Oṃ Maṇi Padme Hūṃ</div>
+      <p class="author">by <strong>Khenpo Kunga Rinchen</strong></p>
+      <p style="margin-top:0.5rem;">Meaning · Symbolism · Practice · Benefits</p>
+      <p style="margin-top:0.8rem; font-size:0.95rem;">A Combined Explanation of the Vidyā-Mantra<br>of the Noble Avalokiteśvara</p>
+      <p style="margin-top:0.8rem;">English · 漢文 &nbsp; Bilingual Edition</p>
+      <div class="lotus-divider">❀</div>
+      <blockquote>
+        “The state of Buddhahood need not be sought somewhere outside. The cause, the potential for attaining it, exists already within one's own mindstream.”
+        <br>— Khenpo Kunga Rinchen
+      </blockquote>
+      <p style="font-size:0.9rem; opacity:0.9;">The lotus is born of mud, yet remains unstained.</p>
+    </div>
+  </header>
+
+  <!-- Table of Contents -->
+  <nav class="toc" id="toc">
+    <div class="toc-grid">
+      <div class="toc-col">
+        <h3>📖 English</h3>
+        <a href="#prologue-en">Prologue</a>
+        <a href="#part1-en">Part I · The Words</a>
+        <a href="#part2-en">Part II · Purification System</a>
+        <a href="#part3-en">Part III · Practice &amp; Benefits</a>
+        <a href="#epilogue-en">Epilogue</a>
+        <a href="#dedication-en">Dedication</a>
+      </div>
+      <div class="toc-col">
+        <h3>📖 漢文</h3>
+        <a href="#prologue-zh">序 · 梵文發音說明</a>
+        <a href="#part1-zh">第一部 · 字義本身</a>
+        <a href="#part2-zh">第二部 · 圓滿淨化體系</a>
+        <a href="#part3-zh">第三部 · 修法與功德</a>
+        <a href="#epilogue-zh">結語</a>
+        <a href="#dedication-zh">迴向</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ENGLISH SECTIONS -->
+  <main>
+    <!-- Prologue -->
+    <section class="section" id="prologue-en">
+      <div class="section-title">
+        <h2>Prologue</h2>
+        <p>A Note on the Sanskrit</p>
+      </div>
+      <p>The well-formed Sanskrit pronunciation is <strong>Oṃ Maṇi Padme Hūṃ</strong>. In the general sense, <em>Oṃ</em> corresponds to the Sanskrit <em>praṇama</em> — profound praise, homage, and prostration — and it also conveys auspiciousness and good fortune.</p>
+      <p>Held in this single utterance is the entire path: the recognition of the impure, the invocation of the pure, and the means by which one becomes the other. What follows is an unfolding of that meaning, syllable by syllable.</p>
+      <div class="art-placeholder">
+        <!-- Replace with a Thangka image of Avalokiteshvara -->
+        <img src="https://images.unsplash.com/photo-1605000797499-95a5b1f2a1d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Lotus and meditation – replace with Avalokiteshvara Thangka">
+        <p class="caption">🌸 Placeholder art – replace with a sacred Thangka of Chenrezig</p>
+      </div>
+    </section>
+
+    <!-- Part I -->
+    <section class="section" id="part1-en">
+      <div class="section-title">
+        <h2>Part I · The Words Themselves</h2>
+      </div>
+      <h3>1. The Six Syllables and Their Direct Meaning</h3>
+      <p>Before entering the symbolism, it is worth meeting the words plainly. Each syllable carries a literal sense in Sanskrit which the deeper teachings then unfold.</p>
+      <ul class="bullet-list">
+        <li><strong>Oṃ</strong> (oṃ) · Composed of A, U, and MA — the seed of body, speech, and mind.</li>
+        <li><strong>Maṇi</strong> (ma·ṇi) · Jewel.</li>
+        <li><strong>Padma</strong> (pad·ma) · Lotus flower. The long e in Padme is a vocative form — representing the eighth grammatical case, the case of calling.</li>
+        <li><strong>Hūṃ</strong> (hūṃ) · A word of urging and summoning; seed syllable of the mind.</li>
+      </ul>
+      <p>Read together, the mantra is an invocation: <em>“O Kye! Holder of the Jewel and the Lotus”</em> — addressed to the deity who holds a crystal rosary and a golden lotus — and an urging: <em>“Please bestow upon me the siddhis of body, speech, and mind!”</em></p>
+
+      <h3>2. Oṃ — The Three Letters A, U, and MA</h3>
+      <p>At the heart of <em>Oṃ</em> lie A, U, and MA. They carry a double burden: the impure (our ordinary body, speech, mind) and the pure (the Buddha's enlightened three doors, the Three Vajras).</p>
+      <ul class="bullet-list">
+        <li>The impure three doors of the practitioner — ordinary, deluded body, speech, and mind.</li>
+        <li>The pure three doors of a Buddha — enlightened body, speech, and mind, the Three Vajras.</li>
+      </ul>
+      <p>The Buddha did not claim there is an entity already perfect from the very beginning. All Buddhas were once just like us — and by relying on the path they attained enlightenment. The pure body, speech, and mind come about by gradually relinquishing the impure natures and transforming them into pure natures. The path that achieves this transformation is indicated by the remaining four syllables: <em>Maṇi</em> and <em>Padma</em> (method and wisdom), and <em>Hūṃ</em> (their union).</p>
+
+      <h3>3. Maṇi — The Jewel of Bodhicitta</h3>
+      <blockquote>Just as a wish-fulfilling jewel fulfills the desires of beings, so the jewel of bodhicitta fulfills the aims of all who seek liberation.</blockquote>
+      <p><em>Maṇi</em> means jewel, symbolising the method aspect: bodhicitta, love, and compassion. Like a precious jewel dispels poverty, bodhicitta dispels the decline of saṃsāra and the limited peace of nirvāṇa.</p>
+
+      <h3>4. Padma — The Lotus of Wisdom</h3>
+      <p><em>Padma</em> means lotus flower, symbolising wisdom. A lotus is born from mud yet remains unstained. Genuine wisdom remains in a state where contradictions do not arise — it does not fall into extremes.</p>
+      <ul class="bullet-list">
+        <li>Wisdom that realises impermanence</li>
+        <li>Wisdom that realises selflessness of persons</li>
+        <li>Wisdom that realises twofold emptiness</li>
+        <li>Wisdom that directly realises emptiness (śūnyatā)</li>
+      </ul>
+
+      <h3>5. Hūṃ — The Indivisible Union</h3>
+      <p><em>Hūṃ</em> indicates the indivisible essence — the union of method and wisdom. Neither method alone nor wisdom alone is sufficient.</p>
+      <ul class="bullet-list">
+        <li><strong>Sūtra perspective:</strong> wisdom embraced by method.</li>
+        <li><strong>Mantra (Vajrayāna) perspective:</strong> a single consciousness that is the fully perfected, indivisible aspect of method and wisdom.</li>
+      </ul>
+      <p>Hūṃ is also the seed syllable of the Unshakable Conqueror Akṣobhya. Thus the six syllables teach that by uniting method and wisdom our impure body, speech, and mind can be transformed into the Buddha’s pure body, speech, and mind.</p>
+    </section>
+
+    <!-- Part II -->
+    <section class="section" id="part2-en">
+      <div class="section-title">
+        <h2>Part II · The Complete Purification System</h2>
+      </div>
+      <p>Each syllable functions within a fourfold framework: a realm of beings whose suffering it pacifies, an affliction it purifies, a perfection it completes, and a buddha-family it reveals.</p>
+      <h3>6. The Six-Syllable Framework</h3>
+      <table>
+        <thead><tr><th>Syllable</th><th>Realm Pacified</th><th>Affliction Purified</th><th>Perfection Completed</th><th>Buddha Family</th></tr></thead>
+        <tbody>
+          <tr><td>Oṃ</td><td>Gods — death & transmigration</td><td>Pride</td><td>Generosity</td><td>Vairocana (white)</td></tr>
+          <tr><td>Ma</td><td>Demigods — strife</td><td>Jealousy</td><td>Moral discipline</td><td>Amoghasiddhi (green)</td></tr>
+          <tr><td>Ṇi</td><td>Humans — birth, aging, death</td><td>Desire</td><td>Patience</td><td>Ratnasambhava (yellow)</td></tr>
+          <tr><td>Pad</td><td>Animals — bondage</td><td>Ignorance</td><td>Joyous effort</td><td>Akṣobhya (blue)</td></tr>
+          <tr><td>Me</td><td>Hungry ghosts — hunger & thirst</td><td>Miserliness</td><td>Meditative concentration</td><td>Amitābha (red)</td></tr>
+          <tr><td>Hūṃ</td><td>Hell beings — heat & cold</td><td>Hatred / anger</td><td>Wisdom</td><td>Vajradhara (dark blue)</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Part III -->
+    <section class="section" id="part3-en">
+      <div class="section-title">
+        <h2>Part III · Practice and Benefits</h2>
+      </div>
+      <h3>7. How to Meditate and Recite</h3>
+      <p>Meditate upon your guru and Noble Avalokiteśvara as inseparable. At their heart, upon a moon disc, visualize the white seed syllable <strong>Hrīḥ</strong>. Around it the six syllables circle. Focus single-pointedly and recite.</p>
+      <div class="art-placeholder">
+        <img src="https://images.unsplash.com/photo-1507003211169-0a74e2e6a5f3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Meditation visualization – replace with mandala or mantra wheel">
+        <p class="caption">🕉️ Visualize Hrīḥ surrounded by the six syllables</p>
+      </div>
+
+      <h3>8. The Benefits of Each Syllable</h3>
+      <table>
+        <thead><tr><th>Syllable</th><th>Perfection</th><th>Siddhi Bestowed</th><th>Affliction Cleansed</th><th>Quality of Avalokiteśvara</th></tr></thead>
+        <tbody>
+          <tr><td>Oṃ</td><td>Generosity</td><td>Supreme siddhi</td><td>Ignorance</td><td>Body · Path of Accumulation</td></tr>
+          <tr><td>Ma</td><td>Moral discipline</td><td>Common siddhis</td><td>Anger</td><td>Speech · Path of Preparation</td></tr>
+          <tr><td>Ṇi</td><td>Patience</td><td>Pacifying illness & spirits</td><td>Miserliness</td><td>Mind · Path of Seeing</td></tr>
+          <tr><td>Pad</td><td>Joyous effort</td><td>Increasing life & merit</td><td>Ignorance</td><td>Qualities · Path of Meditation</td></tr>
+          <tr><td>Me</td><td>Concentration</td><td>Bringing people, wealth under control</td><td>Jealousy</td><td>Activity · Path of No-More-Learning</td></tr>
+          <tr><td>Hūṃ</td><td>Wisdom</td><td>Destroying enemies & obstructers</td><td>Pride</td><td>Deeds · Omniscience</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Epilogue -->
+    <section class="section" id="epilogue-en">
+      <div class="section-title">
+        <h2>Epilogue · The Seed Within</h2>
+      </div>
+      <p>The state of Buddhahood need not be sought somewhere outside. Its cause already exists within our mindstream. As Maitreya stated in the <em>Mahāyānottaratantra</em>, all beings possess buddha-nature (tathāgatagarbha).</p>
+      <p>The six syllables <em>Oṃ Maṇi Padme Hūṃ</em> are the direct method for revealing it. Spoken with attention, they are a recognition of something already here.</p>
+    </section>
+
+    <!-- Dedication -->
+    <section class="section" id="dedication-en">
+      <div class="section-title">
+        <h2>Dedication</h2>
+      </div>
+      <blockquote>
+        By whatever merit may arise from compiling and reading these words,<br>
+        may all beings be freed from suffering and the causes of suffering,<br>
+        and may they swiftly attain the state of the Noble Avalokiteśvara.
+      </blockquote>
+      <p style="text-align:center; font-size:2rem;">❖</p>
+      <p style="text-align:center; font-size:1.8rem;"><em>Oṃ Maṇi Padme Hūṃ</em></p>
+    </section>
+
+    <!-- ================= CHINESE SECTIONS ================= -->
+    <div class="chinese">
+      <section class="section" id="prologue-zh">
+        <div class="section-title">
+          <h2>序 · 梵文發音說明</h2>
+        </div>
+        <p>此咒之正確梵文發音為 <strong>Oṃ Maṇi Padme Hūṃ</strong>（唵嘛呢叭咪吽）。就一般意義而言，「唵」字對應梵文 <em>praṇama</em>，意為深切之讚歎、頂禮與恭敬，並蘊含吉祥圓滿之義。</p>
+        <p>此六字真言之中，涵攝整條道路 ── 對不淨之認識、對清淨之祈請，以及由前者轉成後者之方法。以下將依序展開每一字之深義。</p>
+      </section>
+
+      <section class="section" id="part1-zh">
+        <div class="section-title">
+          <h2>第一部 · 字義本身</h2>
+        </div>
+        <h3>第一章 六字之直接含義</h3>
+        <p>進入象徵意義之前，先須了解每字之直接梵文義，而後深義方可一一展開。</p>
+        <ul class="bullet-list">
+          <li><strong>唵 (Oṃ)</strong> — 由「阿」、「烏」、「嘛」三字組成，為身、語、意之種子。</li>
+          <li><strong>嘛呢 (Maṇi)</strong> — 寶珠。</li>
+          <li><strong>叭咪 (Padma)</strong> — 蓮花。Padme 中之長音「e」為呼格，即梵文八格中之第八格 ── 呼喚之格。</li>
+          <li><strong>吽 (Hūṃ)</strong> — 為勸請與召請之語；亦為心之種子字。</li>
+        </ul>
+        <p>合而觀之，此咒乃為迎請：「持寶珠與蓮花之尊！」並向其覺心懇請：「祈賜予我身、語、意之悉地！」</p>
+
+        <h3>第二章 唵字與阿、烏、嘛三字</h3>
+        <p>「唵」字之核心，為「阿」、「烏」、「嘛」三字。此三字承擔雙重意義 ── 既表不淨，亦表清淨。</p>
+        <ul class="bullet-list">
+          <li>行者之不淨三門 ── 凡夫迷亂之身、語、意。</li>
+          <li>佛陀之清淨三門 ── 覺者之身、語、意，亦稱「三金剛」。</li>
+        </ul>
+        <p>關鍵問題在於：不淨三門能否轉變為清淨三門之本體？或二者本質截然不同？佛法並不主張從本以來即有一實體，本來具足一切功德、永離一切過失。一切佛陀，昔皆與我等相同 ── 憑藉道路而成正覺。清淨之身、語、意，乃由漸次捨離不淨之性、轉成清淨之性而得。成就此一轉化之道，即為咒中其餘四字所示 ── 「嘛呢」與「叭咪」（方便與智慧），以及「吽」（二者之合）。</p>
+
+        <h3>第三章 嘛呢：菩提心之寶珠</h3>
+        <blockquote>如摩尼寶能滿眾生願，菩提心寶能成一切求解脫者之願。</blockquote>
+        <p>「嘛呢」意為「寶珠」，象徵道路中之「方便」分：菩提心、慈與悲。正如珍寶能除貧苦，菩提心之寶能除一切衰退 ── 既除輪迴之衰，亦除小乘涅槃之滯。</p>
+
+        <h3>第四章 叭咪：智慧之蓮花</h3>
+        <p>「叭咪」意為「蓮花」，象徵「智慧」。蓮花生於泥而不染於泥。真實智慧能安住於無諸矛盾之境，不墮於二邊。</p>
+        <ul class="bullet-list">
+          <li>證無常之智</li>
+          <li>證補特伽羅無我之智</li>
+          <li>證能所二取無別之二空之智</li>
+          <li>現證空性（śūnyatā）之智</li>
+        </ul>
+
+        <h3>第五章 吽：不二之合</h3>
+        <p>末字「吽」指示「不二之體」── 方便與智慧之合一。唯方便不足，唯智慧亦不足。</p>
+        <ul class="bullet-list">
+          <li>就顯教而言：方便所攝之智慧。</li>
+          <li>就密咒乘而言：方便與智慧無分之究竟圓滿心識。</li>
+        </ul>
+        <p>「吽」為不動如來（Akṣobhya）之種子字。是故六字真言教示：依方便與智慧合一之道而修，自身不淨之身、語、意，可徹底轉成佛之清淨身、語、意。</p>
+      </section>
+
+      <section class="section" id="part2-zh">
+        <div class="section-title">
+          <h2>第二部 · 圓滿淨化體系</h2>
+        </div>
+        <p>此咒每字皆於一完整之四重架構中發揮作用：對應一類眾生之苦而息之，對應一種煩惱而淨之，對應一種波羅蜜而圓滿之，對應一佛部而顯其覺德。</p>
+        <h3>第六章 六字總攝架構</h3>
+        <table>
+          <thead><tr><th>字</th><th>所息之趣</th><th>所淨煩惱</th><th>所圓波羅蜜</th><th>佛部</th></tr></thead>
+          <tbody>
+            <tr><td>Oṃ</td><td>天 ── 死沒之苦</td><td>我慢</td><td>布施</td><td>毗盧遮那(白)</td></tr>
+            <tr><td>Ma</td><td>阿修羅 ── 鬥諍之苦</td><td>嫉妒</td><td>持戒</td><td>不空成就(綠)</td></tr>
+            <tr><td>Ṇi</td><td>人 ── 生老病死之苦</td><td>貪欲</td><td>忍辱</td><td>寶生(黃)</td></tr>
+            <tr><td>Pad</td><td>畜生 ── 役使縛苦</td><td>愚癡</td><td>精進</td><td>阿閦(藍)</td></tr>
+            <tr><td>Me</td><td>餓鬼 ── 飢渴之苦</td><td>慳吝</td><td>禪定</td><td>阿彌陀(紅)</td></tr>
+            <tr><td>Hūṃ</td><td>地獄 ── 寒熱之苦</td><td>瞋恚</td><td>般若</td><td>金剛持(深藍)</td></tr>
+          </tbody>
+        </table>
+        <p>應觀其結構之次第：由「基」（所息之趣），歷「所淨」（煩惱），至「道」（波羅蜜），終於「果」（佛部）。此咒即將整條道路攝於六字。</p>
+      </section>
+
+      <section class="section" id="part3-zh">
+        <div class="section-title">
+          <h2>第三部 · 修法與功德</h2>
+        </div>
+        <h3>第七章 觀修與念誦方法</h3>
+        <p>觀上師與聖 Avalokiteśvara（觀世音菩薩）無二無別。其心間月輪上，觀白色種子字 <strong>Hrīḥ</strong>（舍）。圍繞中央 Hrīḥ，觀六字環繞而轉。專注一意，如此而誦。</p>
+
+        <h3>第八章 各字之功德</h3>
+        <table>
+          <thead><tr><th>字</th><th>所圓波羅蜜</th><th>所授悉地</th><th>所淨煩惱</th><th>觀世音之德</th></tr></thead>
+          <tbody>
+            <tr><td>Oṃ</td><td>布施</td><td>無上悉地</td><td>愚癡</td><td>身 · 資糧道</td></tr>
+            <tr><td>Ma</td><td>持戒</td><td>共同悉地</td><td>瞋恚</td><td>語 · 加行道</td></tr>
+            <tr><td>Ṇi</td><td>忍辱</td><td>息災除魔之悉地</td><td>慳吝</td><td>意 · 見道</td></tr>
+            <tr><td>Pad</td><td>精進</td><td>增益壽命福德之悉地</td><td>愚癡</td><td>功德 · 修道</td></tr>
+            <tr><td>Me</td><td>禪定</td><td>懷攝人財之悉地</td><td>嫉妒</td><td>事業 · 無學道</td></tr>
+            <tr><td>Hūṃ</td><td>般若</td><td>誅滅怨敵障難之悉地</td><td>我慢</td><td>事行 · 一切智</td></tr>
+          </tbody>
+        </table>
+        <p>由此一咒，「六根本煩惱得淨」、「六波羅蜜得圓」、「六佛部之覺德得顯」── 全道盡攝於一息之誦。</p>
+      </section>
+
+      <section class="section" id="epilogue-zh">
+        <div class="section-title">
+          <h2>結語 · 內具之種子</h2>
+        </div>
+        <p>佛果不必外求。其因 ── 證得之潛能 ── 已具於自心相續之中。正如怙主 Maitreya（彌勒）於《Mahāyānottaratantra》（《大乘無上續論》）中所言：一切眾生本具如來藏（tathāgatagarbha）。</p>
+        <p>六字「唵嘛呢叭咪吽」即為顯露此種子之直接方法。專注而誦，所求非遠 ── 乃對本已現前者之認識而已。</p>
+      </section>
+
+      <section class="section" id="dedication-zh">
+        <div class="section-title">
+          <h2>迴 向</h2>
+        </div>
+        <blockquote>
+          願以此編集與閱誦之諸功德，<br>
+          願一切眾生離苦及苦因，<br>
+          速證聖觀自在之果位。
+        </blockquote>
+        <p style="text-align:center; font-size:2rem;">❖</p>
+        <p style="text-align:center; font-size:1.8rem;">唵 嘛 呢 叭 咪 吽</p>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <p>Compiled with devotion · Bilingual Edition</p>
+    <div class="footer-mantra">Oṃ Maṇi Padme Hūṃ</div>
+    <p style="margin-top:0.5rem;">唵 嘛 呢 叭 咪 吽</p>
+    <p style="margin-top:2rem; font-size:0.85rem;">Artwork placeholders. For an authentic landing page, replace images with traditional Thangka paintings of Avalokiteśvara.</p>
+  </footer>
+
+  <script>
+    // Scroll-triggered animation
+    const sections = document.querySelectorAll('.section');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    sections.forEach(section => observer.observe(section));
+  </script>
+</body>
+</html>
